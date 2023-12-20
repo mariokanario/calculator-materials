@@ -1,21 +1,26 @@
 import React from 'react'
 import MaterialsImg from './MaterialsImg'
+import { useProvider } from './context/Provider'
 
-const MaterialsCont = ({ info }) => {
+const MaterialsCont = () => {
+
+  const { allData } = useProvider()
+
   return (
-      <div className='materiales col-span-1 md:col-span-2 p-5 flex'>
-        {
-              info ?
-                  info.map(data => (
-                      <MaterialsImg
-                          width={data.espesor}
-                          background={data.imagen}
-                      />
-                  ))
-                  :
-                  null
-        }
-      </div>
+    <div className='materiales col-span-1 md:col-span-2 p-5 flex'>
+      {
+        allData ?
+          allData.map(data => (
+            <MaterialsImg
+              key={data.id}
+              width={data.espesor}
+              background={data.imagen}
+            />
+          ))
+          :
+          null
+      }
+    </div>
   )
 }
 

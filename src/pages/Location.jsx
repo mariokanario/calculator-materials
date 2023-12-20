@@ -7,10 +7,12 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 
 import dataCol from '../../json/dataColombia.json'
+import { useProvider } from '../components/context/Provider';
 
 const Location = () => {
 
     const navigate = useNavigate();
+    const { setLocationData } = useProvider()
 
     const Schema = yup
         .object({
@@ -30,8 +32,12 @@ const Location = () => {
         },
         validationSchema: Schema,
         onSubmit: (data) => {
-            console.log(data);
-            // navigate("/materials")
+            setLocationData({
+                ...data,
+                clima: tempSingleMunicipio?.CLIMA,
+                altitud: tempSingleMunicipio?.ALTITUD
+            });
+            navigate("/materials")
         },
     });
 

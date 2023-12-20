@@ -10,14 +10,22 @@ import { useFormik } from "formik";
 
 import dataMat from '../../json/dataMateriales.json'
 import MaterialsCont from '../components/MaterialsCont';
+import { useProvider } from '../components/context/Provider';
 
 const Materials = () => {
 
-  const [allData, setAllData] = useState([])
   const navigate = useNavigate();
+
+  const { allData, setAllData } = useProvider()
 
   const Schema = yup
     .object({
+      tempAmb: yup
+        .string()
+        .required("Escriba un valor"),
+      tempInt: yup
+        .string()
+        .required("Escriba un valor"),
       familia: yup
         .string()
         .required("Elije una opción"),
@@ -32,59 +40,75 @@ const Materials = () => {
 
   const formik = useFormik({
     initialValues: {
+      tempAmb: "",
+      tempInt: "",
       familia: "",
       tipologia: "",
       material: "",
     },
     validationSchema: Schema,
     onSubmit: (data) => {
-      console.log(data);
+      setAllData([
+        ...allData,
+        {
+          data,
+          material,
+          ...dataMat[familia][tipologia][material]
+        }
+      ])
+      navigate("/result")
     },
   });
 
-  const { familia, tipologia, material } = formik.values;
+  const { familia, tipologia, material, tempAmb, tempInt } = formik.values;
 
   const familiaData = Object.keys(dataMat);
-
   const [tipologias, setTipologias] = useState([]);
   const [materiales, setMateriales] = useState([]);
 
   useEffect(() => {
     if (familia) {
-        const tmpTipologias = Object.keys(dataMat[familia]);
-        setTipologias(tmpTipologias);
-        formik.setFieldValue('tipologia', '');
+      const tmpTipologias = Object.keys(dataMat[familia]);
+      setMateriales([])
+      formik.setFieldValue('material', '');
+      formik.setFieldValue('tipologias', '');
+      setTipologias(tmpTipologias);
+    } else {
+      setTipologias([])
     }
   }, [familia]);
 
   useEffect(() => {
     if (tipologia) {
-        const tmpMaterials = Object.keys(dataMat[familia][tipologia]);
-        setMateriales(tmpMaterials);
-        formik.setFieldValue('material', '');
+      const tmpMaterials = Object.keys(dataMat[familia][tipologia]);
+      setMateriales(tmpMaterials);
+      formik.setFieldValue('material', '');
+    } else {
+      setMateriales([])
     }
   }, [tipologia]);
 
   const addData = () => {
-    if (allData.length < 6) {
-      setAllData([
-        ...allData,
-        {
-          familia,
-          tipologia,
-          material,
-          espesor: dataMat[familia][tipologia][material].espesor,
-          conductividad: dataMat[familia][tipologia][material].conductividad,
-          resistencia: dataMat[familia][tipologia][material].resistencia,
-          imagen: dataMat[familia][tipologia][material].imagen
-        }
-      ])
+    if (familia && tipologia && material) {
+      if (allData.length < 6) {
+        setAllData([
+          ...allData,
+          {
+            tempAmb,
+            tempInt,
+            familia,
+            tipologia,
+            material,
+            ...dataMat[familia][tipologia][material]
+          }
+        ])
+      } else {
+        alert("Solo puede agregar un máximo de 6 materiales")
+      }
     } else {
-      alert("Solo puede agregar un máximo de 6 materiales")
+      alert("no esta completo el formulario")
     }
-
   }
-
 
   return (
     <div className='container container-medium'>
@@ -92,12 +116,37 @@ const Materials = () => {
 
       <Breadcrumb />
 
+      <h2 className='title-radio mt-5'>Seleccionar condiciones climáticas</h2>
+
+
       <form onSubmit={formik.handleSubmit}>
         <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
 
-          <Input type="number" label="Temperatura media ambiente (ºC)" placeholder="0 ºC" />
+          <Input
+            type="number"
+            min="0"
+            label="Temperatura media ambiente (ºC)"
+            placeholder="0 ºC"
+            id="tempAmb"
+            value={tempAmb}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            errorMessage={formik.errors.tempAmb}
+            isInvalid={formik.errors.tempAmb && formik.touched.tempAmb}
+          />
 
-          <Input type="number" label="Temperatura interior deseada (ºC)" placeholder="0 ºC" />
+          <Input
+            type="number"
+            min="0"
+            label="Temperatura interior deseada (ºC)"
+            placeholder="0 ºC"
+            id="tempInt"
+            value={tempInt}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            errorMessage={formik.errors.tempInt}
+            isInvalid={formik.errors.tempInt && formik.touched.tempInt}
+          />
 
 
         </div>
@@ -181,22 +230,16 @@ const Materials = () => {
           <div className='col-span-1 md:col-span-2'>
             <Button size="lg" className='my-1' color="primary" variant="bordered"
               onPress={addData}
-              disabled={!(familia && tipologia && material)}
             >
               Añadir material
               <FaAngleDown />
             </Button>
           </div>
 
+          <TableMaterials />
 
+          <MaterialsCont />
 
-          <TableMaterials
-            info={allData}
-          />
-
-          <MaterialsCont
-            info={allData}
-          />
         </div>
 
         <div className='flex justify-center gap-5'>
