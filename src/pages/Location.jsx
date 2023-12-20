@@ -1,30 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import React from 'react'
+import { Button,  Select, SelectItem } from "@nextui-org/react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../components/Breadcrumb';
-import dataCol from '../../json/dataColombia.json'
+import * as yup from "yup";
+import { useFormik } from "formik";
 
+import dataCol from '../../json/dataColombia.json'
 
 const Location = () => {
 
     const navigate = useNavigate();
 
-    const [departamentoSel, setDepartamentoSel] = useState(null)
-    const [municipioSel, setMunicipioSel] = useState(null)
-    const [dataMun, setDataMun] = useState(null)
+    const Schema = yup
+        .object({
+            departamento: yup
+                .string()
+                .required("Elije una opción"),
+            municipio: yup
+                .string()
+                .required("Elije una opción"),
+        })
+        .required();
 
-    const array = dataCol.map(data => data.DEPARTAMENTO)
-    const uniqueSet = new Set(array)
-    const departamentos = [...uniqueSet]
+    const formik = useFormik({
+        initialValues: {
+            departamento: "",
+            municipio: ""
+        },
+        validationSchema: Schema,
+        onSubmit: (data) => {
+            console.log(data);
+            // navigate("/materials")
+        },
+    });
 
-    useEffect(() => {
-        setDataMun(dataCol.find(e => e.DEPARTAMENTO == departamentoSel && e.MUNICIPIO == municipioSel))
-    }, [departamentoSel, municipioSel])
+    const { departamento, municipio } = formik.values;
 
-    console.log(dataMun);
+    const departamentos = Object.keys(dataCol)
 
-
+    const tempMunicipios = departamento ? dataCol[departamento] : []; 
+    const tempSingleMunicipio = tempMunicipios?.find(dep => dep.MUNICIPIO === municipio);
 
     return (
         <div className='container container-medium'>
@@ -32,62 +48,69 @@ const Location = () => {
 
             <Breadcrumb />
 
-            <form>
+            <form onSubmit={formik.handleSubmit}>
                 <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
                     <div>
 
                         <Select
                             label="Departamento"
                             id="departamento"
+                            value={departamento}
                             name="departamento"
                             placeholder="ejem: Antioquia"
-                            onChange={(e) => setDepartamentoSel(e.target.value)}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            errorMessage={formik.errors.departamento}
+                            isInvalid={formik.errors.departamento && formik.touched.departamento}
                         >
                             {
-                                departamentos.map((departamento) => (
-                                    <SelectItem 
-                                    key={departamento} 
-                                    value={departamento}
-                                    textValue={departamento}
-                                    > {departamento} </SelectItem>
+                                departamentos.map((dep) => (
+                                    <SelectItem
+                                        key={dep}
+                                        value={dep}
+                                        textValue={dep}
+                                    > 
+                                    {dep} 
+                                    </SelectItem>
                                 ))
                             }
                         </Select>
 
                         <Select
                             className='mt-3'
-                            label="Ciudad"
-                            id="ciudad"
-                            name="ciudad"
+                            label="Municipio"
+                            id="municipio"
+                            value={municipio}
+                            name="municipio"
                             placeholder="ejem: Medellín"
-                            onChange={(e) => setMunicipioSel(e.target.value)}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            errorMessage={formik.errors.municipio}
+                            isInvalid={formik.errors.municipio && formik.touched.municipio}
 
                         >
                             {
-                                departamentoSel != undefined || departamentoSel != null ?
-                                    dataCol
-                                        .filter(dataC => dataC.DEPARTAMENTO == departamentoSel)
-                                        .map(municipio => (
-                                            <SelectItem key={municipio.MUNICIPIO} value={municipio.MUNICIPIO}>
-                                                {municipio.MUNICIPIO}
-                                            </SelectItem>
-                                        )
-                                        )
-                                    :
-                                    null
+                               tempMunicipios.map(dep=>(
+                                    <SelectItem key={dep.MUNICIPIO} value={dep.MUNICIPIO}>
+                                        {dep.MUNICIPIO}
+                                    </SelectItem>
+                                ))
                             }
+
+                           
                         </Select>
+
 
                         <div className='text-4x2 text-left  mt-5'>
                             <h2>Altitud departamento:</h2>
 
                             {
-                                dataMun != undefined && dataMun != null ?
+                                departamento && municipio  ?
                                     <h2 className='text-4xl font-bold'>
-                                        {dataMun.ALTITUD}
+                                        {tempSingleMunicipio?.ALTITUD}
                                     </h2>
                                     :
-                                    <small className='text-slate-200'>Selecciona departamento y ciudad</small>
+                                    <small className='text-slate-200'>Selecciona departamento y municipio</small>
                             }
 
                         </div>
@@ -96,15 +119,15 @@ const Location = () => {
                             <h2>Zona climática:</h2>
 
                             {
-                                dataMun != undefined && dataMun != null ?
+                                departamento && municipio ?
                                     <h2 className='text-4xl font-bold'>
-                                        {dataMun.CLIMA}
+                                        {tempSingleMunicipio?.CLIMA}
                                     </h2>
                                     :
-                                    <small className='text-slate-200'>Selecciona departamento y ciudad</small>
+                                    <small className='text-slate-200'>Selecciona departamento y municipio</small>
                             }
 
-                        </div>
+                        </div> 
 
 
 
@@ -121,7 +144,7 @@ const Location = () => {
                         <FaChevronLeft />
                         Anterior
                     </Button>
-                    <Button size="lg" className='my-8' color="primary" onPress={() => navigate("/materials")}>
+                    <Button type='submit' size="lg" className='my-8' color="primary">
                         Siguiente
                         <FaChevronRight />
                     </Button>

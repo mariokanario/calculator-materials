@@ -5,8 +5,8 @@ const MaterialsImg = ( {width, background} ) => {
     <div style={{
       width: width + "px",
       height: "150px",
-      backgroundImage: "url(/img/materials/" + background + ")"
-
+      backgroundImage: "url(/img/materials/" + background + ")",
+      margin: "1px"
     }}>
 
     </div>

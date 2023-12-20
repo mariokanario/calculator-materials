@@ -1,14 +1,89 @@
-import { Button, Input, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from '@nextui-org/react'
-import React from 'react'
-import { FaChevronRight, FaAngleDown } from 'react-icons/fa'
+import { Button, Input, Select, SelectItem } from '@nextui-org/react'
+import React, { useEffect, useState } from 'react'
+import { FaChevronRight, FaAngleDown, FaChevronLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../components/Breadcrumb';
-import dataMat from '../../json/dataMateriales.json'
 import MaterialsImg from '../components/MaterialsImg';
+import TableMaterials from '../components/TableMaterials';
+import * as yup from "yup";
+import { useFormik } from "formik";
+
+import dataMat from '../../json/dataMateriales.json'
+import MaterialsCont from '../components/MaterialsCont';
 
 const Materials = () => {
 
+  const [allData, setAllData] = useState([])
   const navigate = useNavigate();
+
+  const Schema = yup
+    .object({
+      familia: yup
+        .string()
+        .required("Elije una opción"),
+      tipologia: yup
+        .string()
+        .required("Elije una opción"),
+      material: yup
+        .string()
+        .required("Elije una opción"),
+    })
+    .required();
+
+  const formik = useFormik({
+    initialValues: {
+      familia: "",
+      tipologia: "",
+      material: "",
+    },
+    validationSchema: Schema,
+    onSubmit: (data) => {
+      console.log(data);
+    },
+  });
+
+  const { familia, tipologia, material } = formik.values;
+
+  const familiaData = Object.keys(dataMat);
+
+  const [tipologias, setTipologias] = useState([]);
+  const [materiales, setMateriales] = useState([]);
+
+  useEffect(() => {
+    if (familia) {
+        const tmpTipologias = Object.keys(dataMat[familia]);
+        setTipologias(tmpTipologias);
+        formik.setFieldValue('tipologia', '');
+    }
+  }, [familia]);
+
+  useEffect(() => {
+    if (tipologia) {
+        const tmpMaterials = Object.keys(dataMat[familia][tipologia]);
+        setMateriales(tmpMaterials);
+        formik.setFieldValue('material', '');
+    }
+  }, [tipologia]);
+
+  const addData = () => {
+    if (allData.length < 6) {
+      setAllData([
+        ...allData,
+        {
+          familia,
+          tipologia,
+          material,
+          espesor: dataMat[familia][tipologia][material].espesor,
+          conductividad: dataMat[familia][tipologia][material].conductividad,
+          resistencia: dataMat[familia][tipologia][material].resistencia,
+          imagen: dataMat[familia][tipologia][material].imagen
+        }
+      ])
+    } else {
+      alert("Solo puede agregar un máximo de 6 materiales")
+    }
+
+  }
 
 
   return (
@@ -17,7 +92,7 @@ const Materials = () => {
 
       <Breadcrumb />
 
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
 
           <Input type="number" label="Temperatura media ambiente (ºC)" placeholder="0 ºC" />
@@ -33,31 +108,81 @@ const Materials = () => {
 
           <Select
             label="Familia"
+            id="familia"
+            value={familia}
+            name="familia"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            errorMessage={formik.errors.familia}
+            isInvalid={formik.errors.familia && formik.touched.familia}
           >
-            <SelectItem value="Salud"> Metales </SelectItem>
-            <SelectItem value="Educación"> Maderas </SelectItem>
-            <SelectItem value="Residencial"> Hormigones </SelectItem>
-            <SelectItem value="Comercial"> Morteros </SelectItem>
+            {
+              familiaData.map((fam) => (
+                <SelectItem
+                  key={fam}
+                  value={fam}
+                  textValue={fam}
+                >
+                  {fam}
+                </SelectItem>
+              ))
+            }
+
           </Select>
 
           <Select
             label="Tipología"
+            id="tipologia"
+            value={tipologia}
+            name="tipologia"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            errorMessage={formik.errors.tipologia}
+            isInvalid={formik.errors.tipologia && formik.touched.tipologia}
           >
-            <SelectItem value="Salud"> Plásticos </SelectItem>
-            <SelectItem value="Educación"> Productos de plásticos </SelectItem>
+            {
+              tipologias?.map((tip) => (
+                <SelectItem
+                  key={tip}
+                  value={tip}
+                  textValue={tip}
+                >
+                  {tip}
+                </SelectItem>
+              ))
+            }
           </Select>
 
           <Select
             label="Material"
+            id="material"
+            value={material}
+            name="material"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            errorMessage={formik.errors.material}
+            isInvalid={formik.errors.material && formik.touched.material}
           >
-            <SelectItem value="Salud"> Acrílicos </SelectItem>
-            <SelectItem value="Educación"> Linóleo </SelectItem>
+            {
+              materiales?.map((mat) => (
+                <SelectItem
+                  key={mat}
+                  value={mat}
+                  textValue={mat}
+                >
+                  {mat}
+                </SelectItem>
+              ))
+            }
           </Select>
 
           <Input type="number" label="Espesor (mt)" placeholder="0" />
 
           <div className='col-span-1 md:col-span-2'>
-            <Button size="lg" className='my-1' color="primary" variant="bordered" onPress={() => navigate("/result")}>
+            <Button size="lg" className='my-1' color="primary" variant="bordered"
+              onPress={addData}
+              disabled={!(familia && tipologia && material)}
+            >
               Añadir material
               <FaAngleDown />
             </Button>
@@ -65,40 +190,25 @@ const Materials = () => {
 
 
 
-          <Table className='col-span-1 md:col-span-2'>
-            <TableHeader>
-              <TableColumn>Material</TableColumn>
-              <TableColumn>Espesor e (m)</TableColumn>
-              <TableColumn>Conductividad λ (W / m·K) </TableColumn>
-              <TableColumn>Resistencia Térmica Rn (m2·K / W)  </TableColumn>
-            </TableHeader>
+          <TableMaterials
+            info={allData}
+          />
 
-            <TableBody>
-              <TableRow className='text-left'>
-                <TableCell> 1 </TableCell>
-                <TableCell> 1 </TableCell>
-                <TableCell> 1 </TableCell>
-                <TableCell> 1 </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-
-          <div className='materiales col-span-1 md:col-span-2 p-5 flex'>
-            <MaterialsImg
-              width={ "20" }
-              background={"aislante.png"}
-            />
-            <MaterialsImg
-              width={"60"}
-              background={"placo_placo.png"}
-            />
-          </div>
+          <MaterialsCont
+            info={allData}
+          />
         </div>
 
-        <Button size="lg" className='my-8' color="primary" onPress={() => navigate("/result")}>
-          Calcular
-          <FaChevronRight />
-        </Button>
+        <div className='flex justify-center gap-5'>
+          <Button size="lg" className='my-8' color="primary" variant="faded" onPress={() => navigate(-1)}>
+            <FaChevronLeft />
+            Anterior
+          </Button>
+          <Button type='submit' size="lg" className='my-8' color="primary">
+            Siguiente
+            <FaChevronRight />
+          </Button>
+        </div>
       </form>
     </div>
   )
