@@ -10,9 +10,9 @@ const MaterialsCont = () => {
     <div className='materiales col-span-1 md:col-span-2 p-5 flex'>
       {
         allData ?
-          allData.map(data => (
+          allData.materiales.map( (data, i) => (
             <MaterialsImg
-              key={data.id}
+              key={i}
               width={data.espesor}
               background={data.imagen}
             />

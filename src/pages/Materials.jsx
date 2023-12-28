@@ -1,4 +1,4 @@
-import { Button, Input, Select, SelectItem } from '@nextui-org/react'
+import { Button, Card, Input, Select, SelectItem } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { FaChevronRight, FaAngleDown, FaChevronLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,7 @@ import MaterialsImg from '../components/MaterialsImg';
 import TableMaterials from '../components/TableMaterials';
 import * as yup from "yup";
 import { useFormik } from "formik";
-
+import Transition from '../components/Transition';
 import dataMat from '../../json/dataMateriales.json'
 import MaterialsCont from '../components/MaterialsCont';
 import { useProvider } from '../components/context/Provider';
@@ -45,26 +45,27 @@ const Materials = () => {
       familia: "",
       tipologia: "",
       material: "",
+      espesor: 0,
     },
     validationSchema: Schema,
-    onSubmit: (data) => {
-      setAllData([
+    onSubmit: () => {
+      setAllData({
         ...allData,
-        {
-          data,
-          material,
-          ...dataMat[familia][tipologia][material]
-        }
-      ])
+        tempAmb,
+        tempInt
+      })
       navigate("/result")
     },
   });
 
-  const { familia, tipologia, material, tempAmb, tempInt } = formik.values;
+  const { familia, tipologia, material, tempAmb, tempInt, espesor } = formik.values;
 
   const familiaData = Object.keys(dataMat);
   const [tipologias, setTipologias] = useState([]);
   const [materiales, setMateriales] = useState([]);
+  const [espesores, setEspesores] = useState();
+  const [conductividad, setConductividad] = useState();
+  const [resistenciaTermica, setResistenciaTermica] = useState()
 
   useEffect(() => {
     if (familia) {
@@ -88,20 +89,39 @@ const Materials = () => {
     }
   }, [tipologia]);
 
+  useEffect(() => {
+    if (material) {
+      setEspesores(dataMat[familia][tipologia][material].espesor / 1000)
+      setConductividad(dataMat[familia][tipologia][material].conductividad / 1000)
+    } else {
+      setEspesores(0)
+    }
+  }, [material])
+
+  useEffect(() => {
+    formik.setFieldValue('espesor', espesores);
+    setResistenciaTermica(espesores / conductividad)
+  }, [espesores])
+
+
   const addData = () => {
     if (familia && tipologia && material) {
-      if (allData.length < 6) {
-        setAllData([
-          ...allData,
-          {
-            tempAmb,
-            tempInt,
-            familia,
-            tipologia,
-            material,
-            ...dataMat[familia][tipologia][material]
-          }
-        ])
+      if (allData.materiales.length < 6) {
+        setAllData({
+          materiales:
+            [
+              ...allData.materiales,
+              {
+                familia,
+                tipologia,
+                material,
+                ...dataMat[familia][tipologia][material],
+                espesor,
+                conductividad,
+                resistenciaTermica
+              }
+            ]
+        })
       } else {
         alert("Solo puede agregar un máximo de 6 materiales")
       }
@@ -111,149 +131,177 @@ const Materials = () => {
   }
 
   return (
-    <div className='container container-medium'>
-      <h2 className='text-2xl font-bold'>Paso 2: <span className='font-normal'>Condiciones interiores</span></h2>
+    <main class="grid grid-cols-1 md:grid-cols-5 min-h-screen">
 
-      <Breadcrumb />
+      <section className='bg-left col-span-1 md:col-span-2 p-4 flex items-center justify-end'>
+        <article className='title-cont text-left pl-8'>
+          <h2 className=' text-1xl md:text-4xl font-bold uppercase'>Paso 2:</h2>
+          <h2 className=' text-1xl md:text-4xl font-normal uppercase'>Condiciones interiores</h2>
+          <Breadcrumb />
+        </article>
+      </section>
 
-      <h2 className='title-radio mt-5'>Seleccionar condiciones climáticas</h2>
+      <section className="bg-right col-span-1 md:col-span-3 p-4  flex flex-col justify-center">
 
-
-      <form onSubmit={formik.handleSubmit}>
-        <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
-
-          <Input
-            type="number"
-            min="0"
-            label="Temperatura media ambiente (ºC)"
-            placeholder="0 ºC"
-            id="tempAmb"
-            value={tempAmb}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            errorMessage={formik.errors.tempAmb}
-            isInvalid={formik.errors.tempAmb && formik.touched.tempAmb}
-          />
-
-          <Input
-            type="number"
-            min="0"
-            label="Temperatura interior deseada (ºC)"
-            placeholder="0 ºC"
-            id="tempInt"
-            value={tempInt}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            errorMessage={formik.errors.tempInt}
-            isInvalid={formik.errors.tempInt && formik.touched.tempInt}
-          />
-
-
+        <div className="cont-logo pb-0">
+          <img className='pb-0 mx-auto' src="./img/logo.svg" alt="" style={{ width: "150px" }} />
         </div>
+        <Transition>
+          <Card className='card-cont p-10 ms-5'>
 
-        <h2 className='title-radio mt-5'>Seleccionar material</h2>
+            <h2 className='font-bold text-left mt-5'>Seleccionar condiciones climáticas</h2>
 
-        <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
+            <form onSubmit={formik.handleSubmit}>
+              <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
 
-          <Select
-            label="Familia"
-            id="familia"
-            value={familia}
-            name="familia"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            errorMessage={formik.errors.familia}
-            isInvalid={formik.errors.familia && formik.touched.familia}
-          >
-            {
-              familiaData.map((fam) => (
-                <SelectItem
-                  key={fam}
-                  value={fam}
-                  textValue={fam}
+                <Input
+                  type="number"
+                  min="0"
+                  label="Temperatura media ambiente (ºC)"
+                  placeholder="0 ºC"
+                  id="tempAmb"
+                  value={tempAmb}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.tempAmb}
+                  isInvalid={formik.errors.tempAmb && formik.touched.tempAmb}
+                />
+
+                <Input
+                  type="number"
+                  min="0"
+                  label="Temperatura interior deseada (ºC)"
+                  placeholder="0 ºC"
+                  id="tempInt"
+                  value={tempInt}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.tempInt}
+                  isInvalid={formik.errors.tempInt && formik.touched.tempInt}
+                />
+
+
+              </div>
+
+              <h2 className='font-bold text-left  mt-8'>Seleccionar material</h2>
+
+              <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
+
+                <Select
+                  label="Familia"
+                  id="familia"
+                  value={familia}
+                  name="familia"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.familia}
+                  isInvalid={formik.errors.familia && formik.touched.familia}
                 >
-                  {fam}
-                </SelectItem>
-              ))
-            }
+                  {
+                    familiaData.map((fam) => (
+                      <SelectItem
+                        key={fam}
+                        value={fam}
+                        textValue={fam}
+                      >
+                        {fam}
+                      </SelectItem>
+                    ))
+                  }
 
-          </Select>
+                </Select>
 
-          <Select
-            label="Tipología"
-            id="tipologia"
-            value={tipologia}
-            name="tipologia"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            errorMessage={formik.errors.tipologia}
-            isInvalid={formik.errors.tipologia && formik.touched.tipologia}
-          >
-            {
-              tipologias?.map((tip) => (
-                <SelectItem
-                  key={tip}
-                  value={tip}
-                  textValue={tip}
+                <Select
+                  label="Tipología"
+                  id="tipologia"
+                  value={tipologia}
+                  isDisabled={familia ? false : true}
+                  name="tipologia"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.tipologia}
+                  isInvalid={formik.errors.tipologia && formik.touched.tipologia}
                 >
-                  {tip}
-                </SelectItem>
-              ))
-            }
-          </Select>
+                  {
+                    tipologias?.map((tip) => (
+                      <SelectItem
+                        key={tip}
+                        value={tip}
+                        textValue={tip}
+                      >
+                        {tip}
+                      </SelectItem>
+                    ))
+                  }
+                </Select>
 
-          <Select
-            label="Material"
-            id="material"
-            value={material}
-            name="material"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            errorMessage={formik.errors.material}
-            isInvalid={formik.errors.material && formik.touched.material}
-          >
-            {
-              materiales?.map((mat) => (
-                <SelectItem
-                  key={mat}
-                  value={mat}
-                  textValue={mat}
+                <Select
+                  label="Material"
+                  id="material"
+                  value={material}
+                  isDisabled={tipologia ? false : true}
+                  name="material"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.material}
+                  isInvalid={formik.errors.material && formik.touched.material}
                 >
-                  {mat}
-                </SelectItem>
-              ))
-            }
-          </Select>
+                  {
+                    materiales?.map((mat) => (
+                      <SelectItem
+                        key={mat}
+                        value={mat}
+                        textValue={mat}
+                      >
+                        {mat}
+                      </SelectItem>
+                    ))
+                  }
+                </Select>
 
-          <Input type="number" label="Espesor (mt)" placeholder="0" />
+                <Input
+                  type="number"
+                  min="0,000000001"
+                  label="Espesor (mt)"
+                  placeholder="0"
+                  id="espesor"
+                  value={espesor}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.espesor}
+                  isInvalid={formik.errors.espesor && formik.touched.espesor}
+                />
 
-          <div className='col-span-1 md:col-span-2'>
-            <Button size="lg" className='my-1' color="primary" variant="bordered"
-              onPress={addData}
-            >
-              Añadir material
-              <FaAngleDown />
-            </Button>
-          </div>
+                <div className='col-span-1 md:col-span-2'>
+                  <Button size="lg" className='my-1' color="primary" variant="bordered"
+                    onPress={addData}
+                  >
+                    Añadir material
+                    <FaAngleDown />
+                  </Button>
+                </div>
 
-          <TableMaterials />
+                <TableMaterials />
 
-          <MaterialsCont />
+                <MaterialsCont />
 
-        </div>
+              </div>
 
-        <div className='flex justify-center gap-5'>
-          <Button size="lg" className='my-8' color="primary" variant="faded" onPress={() => navigate(-1)}>
-            <FaChevronLeft />
-            Anterior
-          </Button>
-          <Button type='submit' size="lg" className='my-8' color="primary">
-            Siguiente
-            <FaChevronRight />
-          </Button>
-        </div>
-      </form>
-    </div>
+              <div className='flex justify-center gap-5'>
+                <Button size="lg" className='my-8' color="primary" variant="faded" onPress={() => navigate(-1)}>
+                  <FaChevronLeft />
+                  Anterior
+                </Button>
+                <Button type='submit' size="lg" className='my-8' color="primary">
+                  Siguiente
+                  <FaChevronRight />
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </Transition>
+      </section>
+    </main>
   )
 }
 

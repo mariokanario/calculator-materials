@@ -14,7 +14,11 @@ const Provider = ({ children }) => {
   const [userData, setUserData] = useState()
   const [locationData, setLocationData] = useState()
 
-  const [allData, setAllData] = useState([])
+  const [allData, setAllData] = useState({
+    tempAmb: "",
+    tempInt: "",
+    materiales: []
+  })
 
   const swapUp = (arr, index1, index2) => {
     let aux = arr[index1]
