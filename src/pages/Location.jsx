@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Select, SelectItem } from "@nextui-org/react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,8 @@ import { useProvider } from '../components/context/Provider';
 const Location = () => {
 
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
     const { setLocationData } = useProvider()
 
     const Schema = yup
@@ -35,7 +37,8 @@ const Location = () => {
             setLocationData({
                 ...data,
                 clima: tempSingleMunicipio?.CLIMA,
-                altitud: tempSingleMunicipio?.ALTITUD
+                altitud: tempSingleMunicipio?.ALTITUD,
+                temperatura: tempSingleMunicipio?.TEMPERATURA
             });
             navigate("/materials")
         },
@@ -49,7 +52,7 @@ const Location = () => {
     const tempSingleMunicipio = tempMunicipios?.find(dep => dep.MUNICIPIO === municipio);
 
     return (
-        <main class="grid grid-cols-1 md:grid-cols-5 min-h-screen">
+        <main className="grid grid-cols-1 md:grid-cols-5 min-h-screen">
 
             <section className='bg-left col-span-1 md:col-span-2 p-4 flex items-center justify-end'>
 
@@ -74,11 +77,15 @@ const Location = () => {
                 <Transition>
                     <Card className='card-cont p-10 ms-5'>
 
-                        <form onSubmit={formik.handleSubmit}>
+                        <form onSubmit={(e) => {
+                            setIsSubmitting(true)
+                            return formik.handleSubmit(e)
+                        }}>
                             <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
                                 <div className='col-span-1 md:col-span-2'>
 
                                     <Select
+                                        size="lg"
                                         label="Departamento"
                                         id="departamento"
                                         value={departamento}
@@ -86,8 +93,8 @@ const Location = () => {
                                         placeholder="ejem: Antioquia"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        errorMessage={formik.errors.departamento}
-                                        isInvalid={formik.errors.departamento && formik.touched.departamento}
+                                        errorMessage={formik.errors.departamento && (isSubmitting) ? formik.errors.departamento : null}
+                                        isInvalid={formik.errors.departamento}
                                     >
                                         {
                                             departamentos.map((dep) => (
@@ -103,6 +110,7 @@ const Location = () => {
                                     </Select>
 
                                     <Select
+                                        size="lg"
                                         className='mt-3'
                                         label="Municipio"
                                         id="municipio"
@@ -111,8 +119,8 @@ const Location = () => {
                                         placeholder="ejem: Medellín"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        errorMessage={formik.errors.municipio}
-                                        isInvalid={formik.errors.municipio && formik.touched.municipio}
+                                        errorMessage={formik.errors.municipio && (isSubmitting) ? formik.errors.municipio : null}
+                                        isInvalid={formik.errors.municipio }
 
                                     >
                                         {

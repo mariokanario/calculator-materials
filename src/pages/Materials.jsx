@@ -16,7 +16,7 @@ const Materials = () => {
 
   const navigate = useNavigate();
 
-  const { allData, setAllData } = useProvider()
+  const { allData, setAllData, locationData } = useProvider()
 
   const Schema = yup
     .object({
@@ -40,7 +40,7 @@ const Materials = () => {
 
   const formik = useFormik({
     initialValues: {
-      tempAmb: "",
+      tempAmb: locationData?.temperatura,
       tempInt: "",
       familia: "",
       tipologia: "",
@@ -49,23 +49,55 @@ const Materials = () => {
     },
     validationSchema: Schema,
     onSubmit: () => {
-      setAllData({
-        ...allData,
-        tempAmb,
-        tempInt
-      })
-      navigate("/result")
+      if (allData.materiales.length > 0) {
+        setAllData({
+          ...allData,
+          tempAmb,
+          tempInt
+        })
+        navigate("/result")
+      }else{
+        alert("Recuerda añadir el material para poder continuar")
+      }
+      
     },
   });
 
   const { familia, tipologia, material, tempAmb, tempInt, espesor } = formik.values;
 
   const familiaData = Object.keys(dataMat);
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [tipologias, setTipologias] = useState([]);
   const [materiales, setMateriales] = useState([]);
   const [espesores, setEspesores] = useState();
   const [conductividad, setConductividad] = useState();
   const [resistenciaTermica, setResistenciaTermica] = useState()
+
+  const addData = () => {
+    if (familia && tipologia && material) {
+      if (allData.materiales.length < 6) {
+        setAllData({
+          materiales:
+            [
+              ...allData.materiales,
+              {
+                familia,
+                tipologia,
+                material,
+                ...dataMat[familia][tipologia][material],
+                espesor,
+                conductividad,
+                resistenciaTermica
+              }
+            ]
+        })
+      } else {
+        alert("Solo puede agregar un máximo de 6 materiales")
+      }
+    } else {
+      alert("Debes llenar primero el formulario de Selecciónar material")
+    }
+  }
 
   useEffect(() => {
     if (familia) {
@@ -103,35 +135,19 @@ const Materials = () => {
     setResistenciaTermica(espesores / conductividad)
   }, [espesores])
 
+  useEffect(() => {
+    setAllData({
+      tempAmb: "",
+      tempInt: "",
+      materiales: []
+    })
+  }, [])
 
-  const addData = () => {
-    if (familia && tipologia && material) {
-      if (allData.materiales.length < 6) {
-        setAllData({
-          materiales:
-            [
-              ...allData.materiales,
-              {
-                familia,
-                tipologia,
-                material,
-                ...dataMat[familia][tipologia][material],
-                espesor,
-                conductividad,
-                resistenciaTermica
-              }
-            ]
-        })
-      } else {
-        alert("Solo puede agregar un máximo de 6 materiales")
-      }
-    } else {
-      alert("no esta completo el formulario")
-    }
-  }
+
+  // console.log(allData.materiales);
 
   return (
-    <main class="grid grid-cols-1 md:grid-cols-5 min-h-screen">
+    <main className="grid grid-cols-1 md:grid-cols-5 min-h-screen">
 
       <section className='bg-left col-span-1 md:col-span-2 p-4 flex items-center justify-end'>
         <article className='title-cont text-left pl-8'>
@@ -151,10 +167,14 @@ const Materials = () => {
 
             <h2 className='font-bold text-left mt-5'>Seleccionar condiciones climáticas</h2>
 
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={(e) => {
+              setIsSubmitting(true)
+              return formik.handleSubmit(e)
+            }}>
               <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
 
                 <Input
+                  size="lg"
                   type="number"
                   min="0"
                   label="Temperatura media ambiente (ºC)"
@@ -163,11 +183,12 @@ const Materials = () => {
                   value={tempAmb}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  errorMessage={formik.errors.tempAmb}
+                  errorMessage={formik.errors.tempAmb && (formik.touched.tempAmb || isSubmitting) ? formik.errors.tempAmb : null}
                   isInvalid={formik.errors.tempAmb && formik.touched.tempAmb}
                 />
 
                 <Input
+                  size="lg"
                   type="number"
                   min="0"
                   label="Temperatura interior deseada (ºC)"
@@ -176,7 +197,7 @@ const Materials = () => {
                   value={tempInt}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  errorMessage={formik.errors.tempInt}
+                  errorMessage={formik.errors.tempInt && (formik.touched.tempInt || isSubmitting) ? formik.errors.tempInt : null}
                   isInvalid={formik.errors.tempInt && formik.touched.tempInt}
                 />
 
@@ -188,14 +209,15 @@ const Materials = () => {
               <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-3">
 
                 <Select
+                  size="lg"
                   label="Familia"
                   id="familia"
                   value={familia}
                   name="familia"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  errorMessage={formik.errors.familia}
-                  isInvalid={formik.errors.familia && formik.touched.familia}
+                  errorMessage={formik.errors.familia && ( isSubmitting) ? formik.errors.familia : null}
+                  isInvalid={formik.errors.familia}
                 >
                   {
                     familiaData.map((fam) => (
@@ -212,6 +234,7 @@ const Materials = () => {
                 </Select>
 
                 <Select
+                  size="lg"
                   label="Tipología"
                   id="tipologia"
                   value={tipologia}
@@ -219,8 +242,8 @@ const Materials = () => {
                   name="tipologia"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  errorMessage={formik.errors.tipologia}
-                  isInvalid={formik.errors.tipologia && formik.touched.tipologia}
+                  errorMessage={formik.errors.tipologia && (isSubmitting) ? formik.errors.tipologia : null}
+                  isInvalid={formik.errors.tipologia}
                 >
                   {
                     tipologias?.map((tip) => (
@@ -236,6 +259,7 @@ const Materials = () => {
                 </Select>
 
                 <Select
+                  size="lg"
                   label="Material"
                   id="material"
                   value={material}
@@ -243,8 +267,8 @@ const Materials = () => {
                   name="material"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  errorMessage={formik.errors.material}
-                  isInvalid={formik.errors.material && formik.touched.material}
+                  errorMessage={formik.errors.material && (isSubmitting) ? formik.errors.material : null}
+                  isInvalid={formik.errors.material}
                 >
                   {
                     materiales?.map((mat) => (
@@ -260,16 +284,17 @@ const Materials = () => {
                 </Select>
 
                 <Input
+                  size="lg"
                   type="number"
                   min="0,000000001"
-                  label="Espesor (mt)"
+                  label="Espesor (m)"
                   placeholder="0"
                   id="espesor"
                   value={espesor}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  errorMessage={formik.errors.espesor}
-                  isInvalid={formik.errors.espesor && formik.touched.espesor}
+                  errorMessage={formik.errors.espesor && ( isSubmitting) ? formik.errors.espesor : null}
+                  isInvalid={formik.errors.espesor}
                 />
 
                 <div className='col-span-1 md:col-span-2'>

@@ -4,12 +4,12 @@ export const Context = createContext();
 
 const Provider = ({ children }) => {
 
-/*   const [materials, setMaterials] = useState({
-    "desperdicio": null,
-    "tipo": null,
-    "subtipo" : null,
-    "values" : []
-  }); */
+  /*   const [materials, setMaterials] = useState({
+      "desperdicio": null,
+      "tipo": null,
+      "subtipo" : null,
+      "values" : []
+    }); */
 
   const [userData, setUserData] = useState()
   const [locationData, setLocationData] = useState()
@@ -20,14 +20,22 @@ const Provider = ({ children }) => {
     materiales: []
   })
 
-  const swapUp = (arr, index1, index2) => {
+  /* const swapUp = (arr, index1, index2) => {
     let aux = arr[index1]
     arr[index1] = arr[index2]
     arr[index2] = aux
-  }
+    return arr
+  } */
 
   return (
-    <Context.Provider value={{ allData, setAllData, setUserData, setLocationData, userData, locationData } }>
+    <Context.Provider value={{
+      allData,
+      userData,
+      locationData,
+      setAllData,
+      setUserData,
+      setLocationData
+    }}>
       {children}
     </Context.Provider>
   );

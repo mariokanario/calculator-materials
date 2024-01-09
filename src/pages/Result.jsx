@@ -20,19 +20,32 @@ const Result = () => {
 
     const downloadPDF = () => {
         const capture = document.querySelector("#print")
+
+        const margenSuperior = 60; 
+        const margenInferior = 50; 
+        const margenIzquierdo = 20; 
+        const margenDerecho = 20; 
+
         html2canvas(capture).then((canvas) => {
             const imgData = canvas.toDataURL('/img/png')
             const doc = new jsPDF('p', 'mm', 'a4')
             const componentWidth = doc.internal.pageSize.getWidth()
             const componentHeight = doc.internal.pageSize.getHeight()
-            doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
-            doc.save('cotizacion.pdf')
+
+            doc.setDrawColor(255, 255, 255);
+            doc.rect(margenIzquierdo, margenSuperior, componentWidth - margenIzquierdo - margenDerecho, componentHeight - margenSuperior - margenInferior, 'F');
+
+            doc.addImage('/img/bg-pdf.jpg', 'JPEG', 0, 0, componentWidth, componentHeight);
+
+            doc.addImage(imgData, 'PNG', margenIzquierdo, margenSuperior, componentWidth - margenIzquierdo - margenDerecho, componentHeight - margenSuperior - margenInferior);
+            // doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
+            doc.save('calculadora.pdf')
         })
     }
     // console.log(userData, locationData, allData);
 
     return (
-        <main class="grid grid-cols-1 md:grid-cols-4 min-h-screen">
+        <main className="grid grid-cols-1 md:grid-cols-4 min-h-screen">
 
             <section className='bg-left col-span-1 md:col-span-1 p-4 flex items-center justify-end'>
 
@@ -71,8 +84,8 @@ const Result = () => {
                 <Transition>
                     <Card className='card-result p-10 ms-5'>
                         <div className="container  container-medium relative">
-                            <div id='print'>
-                                <h2 className="text-2xl font-bold">Cotización </h2>
+                            <div id='print' className='p-5'>
+                                <h2 className="text-2xl font-bold">Cálculo resistencia térmica </h2>
 
                                 <div className="result-info mt-5" style={{ width: "100%" }}>
                                     <Card className='col-span-1 md:col-span-3 '>
@@ -149,17 +162,19 @@ const Result = () => {
                                 <MaterialsCont />
 
 
-                                <Button
-                                    className='my-5 bt-new'
-                                    size="lg"
-                                    color="primary"
-                                    onPress={() => navigate("/")}
-                                >
-                                    Crear nueva cotización
-                                </Button>
+                                
                             </div>
-
+                            <Button
+                                className='my-5 bt-new'
+                                size="lg"
+                                color="primary"
+                                onPress={() => navigate("/")}
+                            >
+                                Crear nueva calculadora
+                            </Button>
                         </div>
+
+                        
                     </Card>
                 </Transition >
             </section >

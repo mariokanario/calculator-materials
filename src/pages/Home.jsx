@@ -64,24 +64,24 @@ const Home = () => {
         },
     });
 
-    
+
     const { name, typeDocument, document, email, cellphone, nameProject, typeCert } = formik.values;
 
     return (
-        <main class="grid grid-cols-1 md:grid-cols-5 min-h-screen">
+        <main className="grid grid-cols-1 lg:grid-cols-5 min-h-screen">
 
-            <section className='bg-left col-span-1 md:col-span-2 p-4 flex items-center justify-end'>
+            <section className='bg-left col-span-1 lg:col-span-2 p-4 flex items-center justify-end'>
 
-                <article className='title-cont text-left pr-8'>
+                <article className='title-cont text-left pr-8' >
                     <h2 className=' text-1xl md:text-4xl font-normal'>BIENVENIDO A LA <br /> <b>CALCULADORA</b> DE </h2>
-                    <h3 className=' text-1xl md:text-4xl font-bold' style={{ color: "#ffcf00", fontSize: "50px" }}>RESISTENCIA <br />TÉRMICA</h3>
-                    <p className='title-f3'>Para iniciar tu cotización,<br />
+                    <h3 className=' text-1xl md:text-4xl font-bold my-2'>RESISTENCIA <br />TÉRMICA</h3>
+                    <p className='title-f3'>Para iniciar tu calculadora,<br />
                         llena el siguiente formulario</p>
                 </article>
 
             </section>
 
-            <section className="bg-right col-span-1 md:col-span-3 p-4 static flex flex-col justify-center">
+            <section className="bg-right col-span-1 lg:col-span-3 p-4 static flex flex-col justify-center">
 
                 <div className="cont-logo pb-0">
                     <img className='pb-0 mx-auto' src="./img/logo.svg" alt="" style={{ width: "150px" }} />
@@ -90,11 +90,12 @@ const Home = () => {
                     <form onSubmit={(e) => {
                         setIsSubmitting(true)
                         return formik.handleSubmit(e)
-                        }}>
+                    }}>
                         <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-6">
 
 
                             <Input
+                                size="lg"
                                 className='col-span-1 md:col-span-2'
                                 type="text"
                                 label="Nombre"
@@ -108,14 +109,15 @@ const Home = () => {
                             />
 
                             <Select
+                                size="lg"
                                 label="Tipo de documento"
                                 id="typeDocument"
                                 name="typeDocument"
                                 value={typeDocument}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                errorMessage={formik.errors.typeDocument && (formik.touched.typeDocument || isSubmitting) ? formik.errors.typeDocument : null }
-                                isInvalid={formik.errors.typeDocument && formik.touched.typeDocument}
+                                errorMessage={formik.errors.typeDocument && ( isSubmitting) ? formik.errors.typeDocument : null}
+                                isInvalid={formik.errors.typeDocument }
                             >
                                 <SelectItem key="CC" value="CC"> CC </SelectItem>
                                 <SelectItem key="CE" value="CE"> CE </SelectItem>
@@ -124,6 +126,7 @@ const Home = () => {
                             </Select>
 
                             <Input
+                                size="lg"
                                 type="text"
                                 label="Número de documento"
                                 placeholder=""
@@ -136,6 +139,7 @@ const Home = () => {
                             />
 
                             <Input
+                                size="lg"
                                 type="email"
                                 label="Correo electrónico"
                                 placeholder=""
@@ -148,6 +152,7 @@ const Home = () => {
                             />
 
                             <Input
+                                size="lg"
                                 type="cellphone"
                                 label="Celular"
                                 placeholder=""
@@ -160,15 +165,16 @@ const Home = () => {
                             />
 
                             <Select
-                            className='text-left'
+                                size="lg"
+                                className='text-left'
                                 label="Tipo de certificación de sostenibilidad"
                                 id="typeCert"
                                 name="typeCert"
                                 value={typeCert}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                errorMessage={formik.errors.typeCert && (formik.touched.typeCert || isSubmitting) ? formik.errors.typeCert : null}
-                                isInvalid={formik.errors.typeCert && formik.touched.typeCert}
+                                errorMessage={formik.errors.typeCert && (isSubmitting) ? formik.errors.typeCert : null}
+                                isInvalid={formik.errors.typeCert}
                             >
                                 <SelectItem key="LI" value="LI"> LI </SelectItem>
                                 <SelectItem key="EDGE" value="EDGE"> EDGE </SelectItem>
@@ -179,6 +185,7 @@ const Home = () => {
                             </Select>
 
                             <Input
+                                size="lg"
                                 type="text"
                                 label="Nombre del proyecto"
                                 placeholder=""

@@ -56,7 +56,7 @@
 }
 
 .card-cont, .title-cont {
-  max-width: 640px;
+  max-width: 900px;
 }
 
 .card-result {
@@ -65,6 +65,22 @@
 
 .title-cont {
   position: fixed;
+}
+
+.title-cont h2, .title-cont h3 {
+  line-height: 52px;
+}
+
+.title-cont h3 {
+  color: #ffcf00;
+  font-size: 50px;
+}
+
+@media (max-width: 1024px) {
+
+  .title-cont h3 {
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 768px) {
