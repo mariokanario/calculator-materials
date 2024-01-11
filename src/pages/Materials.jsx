@@ -306,7 +306,7 @@ const Materials = () => {
                   </Button>
                 </div>
 
-                <TableMaterials />
+                <TableMaterials view={true} />
 
                 <MaterialsCont />
 

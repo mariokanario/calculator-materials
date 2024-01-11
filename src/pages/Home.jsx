@@ -68,20 +68,20 @@ const Home = () => {
     const { name, typeDocument, document, email, cellphone, nameProject, typeCert } = formik.values;
 
     return (
-        <main className="grid grid-cols-1 lg:grid-cols-5 min-h-screen">
+        <main className="grid grid-cols-1 md:grid-cols-5 min-h-screen">
 
-            <section className='bg-left col-span-1 lg:col-span-2 p-4 flex items-center justify-end'>
+            <section className='bg-left col-span-1 md:col-span-2 p-4 flex items-center justify-end'>
 
                 <article className='title-cont text-left pr-8' >
-                    <h2 className=' text-1xl md:text-4xl font-normal'>BIENVENIDO A LA <br /> <b>CALCULADORA</b> DE </h2>
-                    <h3 className=' text-1xl md:text-4xl font-bold my-2'>RESISTENCIA <br />TÉRMICA</h3>
-                    <p className='title-f3'>Para iniciar tu calculadora,<br />
+                    <h2 className=' text-2xl md:text-4xl font-normal'>BIENVENIDO A LA <br className='hidden md:block' /> <b>CALCULADORA</b> DE </h2>
+                    <h3 className=' text-1xl md:text-4xl font-bold my-2'>RESISTENCIA <br className='hidden md:block' />TÉRMICA</h3>
+                    <p className='title-f3'>Para iniciar tu calculadora, <br className='hidden md:block' />
                         llena el siguiente formulario</p>
                 </article>
 
             </section>
 
-            <section className="bg-right col-span-1 lg:col-span-3 p-4 static flex flex-col justify-center">
+            <section className="bg-right col-span-1 md:col-span-3 p-4 static flex flex-col justify-center">
 
                 <div className="cont-logo pb-0">
                     <img className='pb-0 mx-auto' src="./img/logo.svg" alt="" style={{ width: "150px" }} />

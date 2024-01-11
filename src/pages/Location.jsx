@@ -63,7 +63,7 @@ const Location = () => {
                             <img src="./img/mapacolombia.svg" alt="" />
                         </div>
                         <h2 className=' text-1xl md:text-4xl font-bold uppercase'>Paso 1:</h2>
-                        <h2 className=' text-1xl md:text-4xl font-normal uppercase'>Selecciona la <br /> localización geográfica</h2>
+                        <h2 className=' text-1xl md:text-4xl font-normal uppercase'>Selecciona la <br className='hidden md:block' /> localización geográfica</h2>
                         <Breadcrumb />
                     </article>
                 </section>

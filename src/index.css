@@ -71,6 +71,12 @@
   line-height: 52px;
 }
 
+@media (max-width: 768px) {
+  .title-cont h2, .title-cont h3 {
+    line-height: 2rem;
+  }
+}
+
 .title-cont h3 {
   color: #ffcf00;
   font-size: 50px;

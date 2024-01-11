@@ -157,7 +157,7 @@ const Result = () => {
                                 </div>
 
                                 <h2 className='font-bold text-left  my-5'>Materiales</h2>
-                                <TableMaterials />
+                                <TableMaterials view={false} />
 
                                 <MaterialsCont />
 
