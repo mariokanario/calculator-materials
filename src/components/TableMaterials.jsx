@@ -126,7 +126,7 @@ const TableMaterials = ( {view }) => {
 
                 </TableRow>
                 <TableRow key={101} className='text-left'>
-                    <TableCell> <h2 className="font-semibold text-base">Transmitancia térmica</h2> </TableCell>
+                    <TableCell> <h2 className="font-semibold text-base">Transmitancia térmica <br /> (W/m2K)</h2> </TableCell>
                     <TableCell>   </TableCell>
                     <TableCell>   </TableCell>
                     <TableCell> {transTerm == "Infinity" ? 0 : transTerm.toFixed(5)}  </TableCell>

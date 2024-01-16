@@ -20,21 +20,18 @@ const Provider = ({ children }) => {
     materiales: []
   })
 
-  /* const swapUp = (arr, index1, index2) => {
-    let aux = arr[index1]
-    arr[index1] = arr[index2]
-    arr[index2] = aux
-    return arr
-  } */
+  const [totalData, setTotalData] = useState()
 
   return (
     <Context.Provider value={{
       allData,
       userData,
       locationData,
+      totalData,
       setAllData,
       setUserData,
-      setLocationData
+      setLocationData,
+      setTotalData
     }}>
       {children}
     </Context.Provider>

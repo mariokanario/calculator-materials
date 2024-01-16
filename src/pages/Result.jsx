@@ -16,7 +16,7 @@ const Result = () => {
 
     const navigate = useNavigate();
 
-    const { userData, locationData, allData } = useProvider()
+    const { userData, locationData, allData, totalData, setTotalData } = useProvider()
 
     const downloadPDF = () => {
         const capture = document.querySelector("#print")
@@ -44,6 +44,16 @@ const Result = () => {
     }
     // console.log(userData, locationData, allData);
 
+    const createPdf = () => {
+        setTotalData({
+            userData,
+            locationData,
+            materialsData: {...allData}
+        })
+    }
+
+    console.log(totalData);
+
     return (
         <main className="grid grid-cols-1 md:grid-cols-4 min-h-screen">
 
@@ -60,7 +70,7 @@ const Result = () => {
                     <Card className="menu-result flex flex-row box-border p-5 justify-around gap-0 sm:gap-5 rounded-none rounded-t-lg mr-5">
                         <Tooltip content="Descargar" color="primary">
                             <Button size="lg" className='text-xl' isIconOnly color="primary"
-                                onClick={downloadPDF}>
+                                onClick={createPdf}>
                                 <RiFileDownloadLine />
                             </Button>
                         </Tooltip>
