@@ -16,43 +16,26 @@ const Result = () => {
 
     const navigate = useNavigate();
 
-    const { userData, locationData, allData, totalData, setTotalData } = useProvider()
+    const { userData, locationData, allData } = useProvider()
 
-    const downloadPDF = () => {
-        const capture = document.querySelector("#print")
-
-        const margenSuperior = 60; 
-        const margenInferior = 50; 
-        const margenIzquierdo = 20; 
-        const margenDerecho = 20; 
-
-        html2canvas(capture).then((canvas) => {
-            const imgData = canvas.toDataURL('/img/png')
-            const doc = new jsPDF('p', 'mm', 'a4')
-            const componentWidth = doc.internal.pageSize.getWidth()
-            const componentHeight = doc.internal.pageSize.getHeight()
-
-            doc.setDrawColor(255, 255, 255);
-            doc.rect(margenIzquierdo, margenSuperior, componentWidth - margenIzquierdo - margenDerecho, componentHeight - margenSuperior - margenInferior, 'F');
-
-            doc.addImage('/img/bg-pdf.jpg', 'JPEG', 0, 0, componentWidth, componentHeight);
-
-            doc.addImage(imgData, 'PNG', margenIzquierdo, margenSuperior, componentWidth - margenIzquierdo - margenDerecho, componentHeight - margenSuperior - margenInferior);
-            // doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
-            doc.save('calculadora.pdf')
-        })
-    }
+    
     // console.log(userData, locationData, allData);
 
     const createPdf = () => {
-        setTotalData({
+        /* setTotalData({
             userData,
             locationData,
             materialsData: {...allData}
+        }) */
+        localStorage.pdf = JSON.stringify({
+            userData,
+            locationData,
+            materialsData: { ...allData }
         })
+
+        navigate('/PdfView')
     }
 
-    console.log(totalData);
 
     return (
         <main className="grid grid-cols-1 md:grid-cols-4 min-h-screen">

@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import Location from "../pages/Location";
 import Materials from "../pages/Materials";
 import Result from "../pages/Result";
+import PdfView from "../pages/PdfView";
 
 export const router = createBrowserRouter([
     {
@@ -23,4 +24,8 @@ export const router = createBrowserRouter([
         path: "/result",
         element: <Result />,
     },
+    {
+        path: "/pdfView",
+        element: <PdfView />,
+    }
 ]);

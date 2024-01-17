@@ -72,6 +72,7 @@ const Materials = () => {
   const [espesores, setEspesores] = useState();
   const [conductividad, setConductividad] = useState();
   const [resistenciaTermica, setResistenciaTermica] = useState()
+  const [stateResistenData, setStateResistenData] = useState(false)
 
   const addData = () => {
     if (familia && tipologia && material) {
@@ -91,6 +92,8 @@ const Materials = () => {
               }
             ]
         })
+        setStateResistenData(true)
+
       } else {
         alert("Solo puede agregar un máximo de 6 materiales")
       }
@@ -136,6 +139,24 @@ const Materials = () => {
   }, [espesores])
 
   useEffect(() => {
+    const resultResisTerm = allData?.materiales?.length ? allData?.materiales?.map(({ resistenciaTermica }) => resistenciaTermica).reduce((acumulador, valor) => acumulador + valor, 0) : 0;
+    const valueResistTem = resultResisTerm <= 0 ? 0 : resultResisTerm.toFixed(5)
+
+    const transTerm = 1 / resultResisTerm
+    const valueTransTer = transTerm == "Infinity" ? 0 : transTerm.toFixed(5)
+
+    setAllData({
+     ...allData,
+      resTer: valueResistTem,
+      transTer: valueTransTer
+    })
+
+    setStateResistenData(false)
+
+  }, [stateResistenData])
+  
+
+  useEffect(() => {
     setAllData({
       tempAmb: "",
       tempInt: "",
@@ -144,7 +165,7 @@ const Materials = () => {
   }, [])
 
 
-  // console.log(allData.materiales);
+  console.log(allData);
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-5 min-h-screen">

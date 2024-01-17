@@ -8,10 +8,6 @@ const TableMaterials = ( {view }) => {
 
     const { allData, setAllData } = useProvider()
 
-    const resultResisTerm = allData.materiales.length ? allData.materiales.map(({ resistenciaTermica }) => resistenciaTermica).reduce((acumulador, valor) => acumulador + valor, 0) : 0
-
-    const transTerm = 1 / resultResisTerm
-
     /* DOWN UP */
 
 
@@ -121,7 +117,7 @@ const TableMaterials = ( {view }) => {
                     <TableCell> <h2 className="font-semibold text-base">Resistencia total</h2> </TableCell>
                     <TableCell>   </TableCell>
                     <TableCell>   </TableCell>
-                    <TableCell> {resultResisTerm <= 0 ? 0 : resultResisTerm.toFixed(5)}  </TableCell>
+                    <TableCell> {allData.resTer}  </TableCell>
                     <TableCell>   </TableCell>
 
                 </TableRow>
@@ -129,7 +125,7 @@ const TableMaterials = ( {view }) => {
                     <TableCell> <h2 className="font-semibold text-base">Transmitancia térmica <br /> (W/m2K)</h2> </TableCell>
                     <TableCell>   </TableCell>
                     <TableCell>   </TableCell>
-                    <TableCell> {transTerm == "Infinity" ? 0 : transTerm.toFixed(5)}  </TableCell>
+                    <TableCell> {allData.transTer}  </TableCell>
                     <TableCell>   </TableCell>
 
                 </TableRow>
