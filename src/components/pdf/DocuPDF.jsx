@@ -192,7 +192,7 @@ const DocuPDF = () => {
                             data.materialsData.materiales.map((val, i) => (
                                 <Image
                                     key={i}
-                                    src={`/public/img/materials/${val.imagen}`}
+                                    src={`/img/materials/${val.imagen}`}
                                     style={{
                                         width: val.espesor < 0 ? (val.espesor * 1000) : (val.espesor * 100) + "px",
                                         minWidth: "10px",
