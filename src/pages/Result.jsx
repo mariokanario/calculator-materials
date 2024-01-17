@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Card, Button, CardBody, Tooltip } from "@nextui-org/react";
-import { FaFileDownload, FaWhatsapp } from "react-icons/fa";
+import {  FaWhatsapp } from "react-icons/fa";
 import { RiFileDownloadLine } from "react-icons/ri";
-import { MdAttachEmail, MdOutlineAttachEmail } from "react-icons/md";
-import { IoLogoWhatsapp } from "react-icons/io";
+import {  MdOutlineAttachEmail } from "react-icons/md";
 import Transition from '../components/Transition';
 import { useProvider } from './../components/context/Provider';
 import { useNavigate } from 'react-router-dom';
 import TableMaterials from '../components/TableMaterials';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import MaterialsCont from '../components/MaterialsCont';
 
 const Result = () => {
