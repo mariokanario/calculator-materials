@@ -165,7 +165,7 @@ const Materials = () => {
   }, [])
 
 
-  console.log(allData);
+  // console.log(allData);
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-5 min-h-screen">

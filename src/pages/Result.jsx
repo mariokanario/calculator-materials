@@ -8,6 +8,8 @@ import { useProvider } from './../components/context/Provider';
 import { useNavigate } from 'react-router-dom';
 import TableMaterials from '../components/TableMaterials';
 import MaterialsCont from '../components/MaterialsCont';
+import whatsapp from "./../../json/whatsapp.json"
+
 
 const Result = () => {
 
@@ -15,22 +17,16 @@ const Result = () => {
 
     const { userData, locationData, allData } = useProvider()
 
-    
-    // console.log(userData, locationData, allData);
 
     const createPdf = () => {
-        /* setTotalData({
-            userData,
-            locationData,
-            materialsData: {...allData}
-        }) */
         localStorage.pdf = JSON.stringify({
             userData,
             locationData,
             materialsData: { ...allData }
         })
 
-        navigate('/PdfView')
+        window.open('/PdfView')
+
     }
 
 
@@ -61,7 +57,7 @@ const Result = () => {
                         </Tooltip>
                         <Tooltip content="Contactar" color="primary">
                             <Button size="lg" className="text-xl" isIconOnly color="primary">
-                                <a href="https://wa.me/573185480907/?text=Hola%20acabo%20de%20realizar%20una%20cotización%20desde%20la%20web"
+                                <a href={`https://wa.me/57${whatsapp.number}/?text=Hola%20acabo%20de%20realizar%20una%20cotización%20desde%20la%20web`}
                                     target="_blank">
                                     <FaWhatsapp />
                                 </a>
