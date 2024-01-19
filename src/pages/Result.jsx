@@ -25,7 +25,7 @@ const Result = () => {
             materialsData: { ...allData }
         })
 
-        window.open('/PdfView')
+        window.open('/#/PdfView')
 
     }
 
