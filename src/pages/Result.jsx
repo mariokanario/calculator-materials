@@ -29,7 +29,7 @@ const Result = () => {
       sustainability_certification: userData.typeCert,
       items: {...locationData, materials: allData.materiales},
     };
-    const response = await fetch("/src/index.php?option=create_termica", {
+    const response = await fetch(`${window.location.origin}${window.location.pathname}src/index.php?option=create_termica`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -46,7 +46,7 @@ const Result = () => {
       materialsData: { ...allData },
     });
 
-    window.open("/#/PdfView");
+    window.open(`${window.location.origin}${window.location.pathname}#/PdfView`);
   };
 
   return (

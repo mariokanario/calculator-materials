@@ -9,7 +9,7 @@ const MaterialsImg = ( {width, background} ) => {
       minWidth: "10px",
       maxWidth: "250px",
       height: "150px",
-      backgroundImage: "url(/img/materials/" + background + ")",
+      backgroundImage: `url("${window.location.origin}${window.location.pathname}assets/img/materials/${background}")`,
     }}>
 
     </div>

@@ -6,7 +6,6 @@ const DocuPDF = () => {
     const styles = StyleSheet.create({
         page: {
             position: 'relative',
-            backgroundImage: 'url("/ruta/de/tu/imagen.jpg")',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             width: '100%',
@@ -54,7 +53,7 @@ const DocuPDF = () => {
         <Document>
             <Page size="A4">
                 <View>
-                    <Image src="/img/pdf-header.jpg" style="width: 100%; " alt="" />
+                    <Image src={`${window.location.origin}${window.location.pathname}img/pdf-header.jpg`} style="width: 100%; " alt="" />
                 </View>
 
                 <View style={{
@@ -212,7 +211,7 @@ const DocuPDF = () => {
 
 
                 <View style=" margin-top: -4px">
-                    <Image src="/img/pdf-footer.jpg" style="width: 100%;" alt="" />
+                    <Image src={`${window.location.origin}${window.location.pathname}img/pdf-footer.jpg`} style="width: 100%;" alt="" />
                 </View>
             </Page>
         </Document>
