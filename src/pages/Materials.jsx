@@ -75,7 +75,7 @@ const Materials = () => {
               ...dataMat[familia][tipologia][material],
               espesor,
               conductividad,
-              resistenciaTermica,
+              resistenciaTermica: espesor / conductividad,
             },
           ],
         });

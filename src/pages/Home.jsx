@@ -176,7 +176,7 @@ const Home = () => {
                                 errorMessage={formik.errors.typeCert && (isSubmitting) ? formik.errors.typeCert : null}
                                 isInvalid={formik.errors.typeCert}
                             >
-                                <SelectItem key="LI" value="LI"> LI </SelectItem>
+                                <SelectItem key="LEED" value="LEED"> LEED </SelectItem>
                                 <SelectItem key="EDGE" value="EDGE"> EDGE </SelectItem>
                                 <SelectItem key="Casa colombiana" value="Casa colombiana"> Casa colombiana </SelectItem>
                                 <SelectItem key="WELL" value="WELL"> WELL </SelectItem>
