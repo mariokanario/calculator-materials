@@ -12,11 +12,11 @@ const DocuPDF = () => {
             height: '100%',
         },
         title: {
-            fontSize: "14px",
+            fontSize: "12px",
             fontWeight: "bold"
         },
         paragraph: {
-            fontSize: "12px",
+            fontSize: "10px",
             fontWeight: "normal"
         },
         sectionOne: {
@@ -24,7 +24,6 @@ const DocuPDF = () => {
             flexDirection: "row",
             flexWrap: "wrap",
             gap: "10px 50px",
-            marginTop: "25px"
         },
         sectionTwo: {
             display: "flex",
@@ -38,12 +37,12 @@ const DocuPDF = () => {
             flexDirection: "row",
             flexWrap: "nowrap",
             justifyContent: "flex-start",
-            margin: "10px 0"
+            margin: "10px 0 0 0"
         },
         tableTh: {
             width: "25%",
             border: "1px solid black",
-            padding: "5px"
+            padding: "2px 5px"
         },
     });
 
@@ -60,9 +59,9 @@ const DocuPDF = () => {
                     backgroundColor: "#FFCF00",
                     width: "88%",
                     margin: "0 auto",
-                    padding: "20px"
+                    padding: "0 20px"
                 }}>
-                    <Text>Cálculo de resistencia térmica</Text>
+                    <Text style={{ margin: "0 0 10px 0" }}>Cálculo de resistencia térmica</Text>
                     <View style={styles.sectionOne}>
                         <View>
                             <Text style={styles.title}>Cliente:</Text>
@@ -93,6 +92,7 @@ const DocuPDF = () => {
                 </View>
 
                 <View style={{ backgroundColor: "#FFCF00", width: "88%", margin: "0 auto", padding: "20px" }}>
+
                     <Text style={styles.title}>Localización geográfica:</Text>
                     <View style={styles.sectionOne}>
                         <View>
@@ -114,7 +114,9 @@ const DocuPDF = () => {
                     </View>
 
                     <View style={styles.sectionOne}>
-                        <Text style={styles.title}>Condiciones climáticas:</Text>
+                        <View style={{ marginTop: "10px" }}>
+                            <Text style={styles.title}>Condiciones climáticas:</Text>
+                        </View>
                     </View>
                     <View style={styles.sectionOne}>
                         <View>
@@ -133,7 +135,7 @@ const DocuPDF = () => {
                     backgroundColor: "#FFCF00",
                     width: "88%",
                     margin: "0 auto",
-                    padding: "20px"
+                    padding: "0 20px"
                 }}>
                     <View style={styles.sectionTwo}>
                         <View style={styles.tableTh}>
@@ -196,7 +198,7 @@ const DocuPDF = () => {
                                         width: val.espesor < 0 ? (val.espesor * 1000) : (val.espesor * 100) + "px",
                                         minWidth: "10px",
                                         maxWidth: "200px",
-                                        height: "150px"
+                                        height: "140px"
                                     }} alt="" />
 
                             ))
