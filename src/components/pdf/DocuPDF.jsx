@@ -1,5 +1,16 @@
 import React from 'react'
-import { Document, Page, Image, View, Text, StyleSheet } from '@react-pdf/renderer'
+import {
+    Document, Page, Image, View, Text, StyleSheet, Font
+} from '@react-pdf/renderer'
+import MyFontNormal from '../../../public/fonts/Gotham-Book.otf'
+import MyFontBold from '../../../public/fonts/Gotham-Bold.otf'
+
+Font.register({
+    family: 'Gotham', fonts: [
+        { src: MyFontNormal, fontStyle: 'normal' }, // font-style: normal, font-weight: normal
+        { src: MyFontBold, fontWeight: 'bold' },
+    ]
+});
 
 const DocuPDF = () => {
 
@@ -13,9 +24,16 @@ const DocuPDF = () => {
         },
         title: {
             fontSize: "12px",
-            fontWeight: "bold"
+            fontFamily: 'Gotham',
+            fontWeight: 'bold',
+        },
+        titleThead: {
+            fontSize: "11px",
+            fontFamily: 'Gotham',
+            fontWeight: 'bold',
         },
         paragraph: {
+            fontFamily: 'Gotham',
             fontSize: "10px",
             fontWeight: "normal"
         },
@@ -31,6 +49,14 @@ const DocuPDF = () => {
             flexWrap: "nowrap",
             justifyContent: "flex-start",
             border: "solid 1px black"
+        },
+        sectionTwoThead: {
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "flex-start",
+            border: "solid 1px black",
+            backgroundColor: 'white'
         },
         sectionThree: {
             display: "flex",
@@ -61,7 +87,13 @@ const DocuPDF = () => {
                     margin: "0 auto",
                     padding: "0 20px"
                 }}>
-                    <Text style={{ margin: "0 0 10px 0" }}>Cálculo de resistencia térmica</Text>
+                    <Text style={{
+                        margin: "0 0 10px 0",
+                        fontFamily: 'Gotham',
+                        fontWeight: 'bold',
+                    }}>
+                        Cálculo de resistencia térmica
+                    </Text>
                     <View style={styles.sectionOne}>
                         <View>
                             <Text style={styles.title}>Cliente:</Text>
@@ -137,18 +169,18 @@ const DocuPDF = () => {
                     margin: "0 auto",
                     padding: "0 20px"
                 }}>
-                    <View style={styles.sectionTwo}>
+                    <View style={styles.sectionTwoThead}>
                         <View style={styles.tableTh}>
-                            <Text style={styles.title}>Material:</Text>
+                            <Text style={styles.titleThead}>Material:</Text>
                         </View>
                         <View style={styles.tableTh}>
-                            <Text style={styles.title}>Espesor (e)(m):</Text>
+                            <Text style={styles.titleThead}>Espesor (e)(m):</Text>
                         </View>
                         <View style={styles.tableTh}>
-                            <Text style={styles.title}>Conductividad (&lambda;) (W / m·K) </Text>
+                            <Text style={styles.titleThead}>Conductividad (&lambda;) (W / m·K) </Text>
                         </View>
                         <View style={styles.tableTh}>
-                            <Text style={styles.title}>Resistencia Térmica (R)(m2·K / W):</Text>
+                            <Text style={styles.titleThead}>Resistencia Térmica (R)(m2·K / W):</Text>
                         </View>
                     </View>
                     {
