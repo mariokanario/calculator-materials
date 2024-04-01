@@ -29,7 +29,7 @@ const Materials = () => {
   const formik = useFormik({
     initialValues: {
       tempAmb: locationData?.temperatura,
-      tempInt: "",
+      tempInt: "24",
       familia: "",
       tipologia: "",
       material: "",
@@ -334,7 +334,7 @@ const Materials = () => {
                   </Button>
                 </div>
 
-                <TableMaterials view={true} />
+                <TableMaterials tempAmb={tempAmb} tempInt={tempInt} view={true} />
 
                 <MaterialsCont />
               </div>

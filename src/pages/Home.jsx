@@ -180,7 +180,6 @@ const Home = () => {
                                 <SelectItem key="EDGE" value="EDGE"> EDGE </SelectItem>
                                 <SelectItem key="Casa colombiana" value="Casa colombiana"> Casa colombiana </SelectItem>
                                 <SelectItem key="WELL" value="WELL"> WELL </SelectItem>
-                                <SelectItem key="Estimula" value="Estimula"> Estimula </SelectItem>
                                 <SelectItem key="No certificado" value="No certificado"> No certificado </SelectItem>
                             </Select>
 

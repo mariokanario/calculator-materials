@@ -134,11 +134,11 @@ const Location = () => {
                 </div>
 
                 <div className="text-4x2 text-left  mt-5">
-                  <h2>Altitud departamento:</h2>
+                  <h2>Altitud municipio:</h2>
 
                   {departamento && municipio ? (
                     <h2 className="text-4xl font-bold">
-                      {tempSingleMunicipio?.ALTITUD}
+                      {tempSingleMunicipio?.ALTITUD} msnm
                     </h2>
                   ) : (
                     <small className="text-slate-200">
