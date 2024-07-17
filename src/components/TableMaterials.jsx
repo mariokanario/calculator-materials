@@ -12,9 +12,6 @@ import { TiTimes, TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 
 const TableMaterials = ({ view, tempAmb, tempInt }) => {
   const { allData, setAllData } = useProvider();
-
-  const [stateResistenData, setStateResistenData] = useState(false);
-
   /* DOWN UP */
 
   const swapUp = (arr, index1, index2) => {
@@ -53,8 +50,8 @@ const TableMaterials = ({ view, tempAmb, tempInt }) => {
       transTer: valueTransTer * (tempAmb - tempInt),
     });
 
-    setStateResistenData(false);
-  }, [stateResistenData, tempAmb, tempInt]);
+    console.log(valueTransTer, (tempAmb - tempInt));
+  }, [allData?.materiales, tempAmb, tempInt]);
 
   /* DELETE */
 
@@ -65,7 +62,6 @@ const TableMaterials = ({ view, tempAmb, tempInt }) => {
       ...allData,
       materiales: deleteArray,
     });
-    setStateResistenData(true);
   };
 
   // console.log(allData);
@@ -160,8 +156,8 @@ const TableMaterials = ({ view, tempAmb, tempInt }) => {
         <TableRow key={100} className="text-left">
           <TableCell>
             {" "}
-            <h2 className="font-semibold text-base">Resistencia total</h2>{" "}
-            <br /> <a href="">Recomendación Técnica</a>
+            <h2 className="font-semibold text-base">Resistencia total</h2>
+             <a href="#">Recomendación Técnica</a>
           </TableCell>
           <TableCell> </TableCell>
           <TableCell> </TableCell>

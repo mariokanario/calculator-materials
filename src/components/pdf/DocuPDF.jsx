@@ -23,18 +23,18 @@ const DocuPDF = () => {
             height: '100%',
         },
         title: {
-            fontSize: "12px",
+            fontSize: "10px",
             fontFamily: 'Gotham',
             fontWeight: 'bold',
         },
         titleThead: {
-            fontSize: "11px",
+            fontSize: "10px",
             fontFamily: 'Gotham',
             fontWeight: 'bold',
         },
         paragraph: {
             fontFamily: 'Gotham',
-            fontSize: "10px",
+            fontSize: "9px",
             fontWeight: "normal"
         },
         sectionOne: {
@@ -212,7 +212,7 @@ const DocuPDF = () => {
                     </View>
                     <View style={styles.sectionTwo}>
                         <View style={styles.tableTh}>
-                            <Text style={styles.paragraph}> Transmitancia térmica (W/m2K): </Text>
+                            <Text style={styles.paragraph}> Transmitancia térmica (W/m2): </Text>
                         </View>
                         <View style={styles.tableTh}>
                             <Text style={styles.paragraph}> {data.materialsData.transTer} </Text>
@@ -241,12 +241,13 @@ const DocuPDF = () => {
 
                 </View>
 
-                {/* FIN TABLA */}
+                {/* FIN TABLA
 
 
                 <View style=" margin-top: -4px">
                     <Image src={`${window.location.origin}${window.location.pathname}img/pdf-footer.jpg`} style="width: 100%;" alt="" />
                 </View>
+                 */}
             </Page>
         </Document>
     )

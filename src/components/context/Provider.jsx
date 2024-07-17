@@ -19,9 +19,9 @@ const Provider = ({ children }) => {
   const [dataWhatsapp, setDataWhatsapp] = useState();
 
   useEffect(() => {
-    fetchData("/json/dataColombia.json", setDataColombia);
-    fetchData("/json/dataMateriales.json", setDataMateriales);
-    fetchData("/json/whatsapp.json", setDataWhatsapp);
+    fetchData("json/dataColombia.json", setDataColombia);
+    fetchData("json/dataMateriales.json", setDataMateriales);
+    fetchData("json/whatsapp.json", setDataWhatsapp);
   }, []);
 
   const fetchData = async (url, set) => {

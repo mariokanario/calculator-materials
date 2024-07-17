@@ -127,27 +127,6 @@ const Materials = () => {
   }, [espesores]);
 
   useEffect(() => {
-    const resultResisTerm = allData?.materiales?.length
-      ? allData?.materiales
-          ?.map(({ resistenciaTermica }) => resistenciaTermica)
-          .reduce((acumulador, valor) => acumulador + valor, 0)
-      : 0;
-    const valueResistTem =
-      resultResisTerm <= 0 ? 0 : resultResisTerm.toFixed(5);
-
-    const transTerm = 1 / resultResisTerm;
-    const valueTransTer = transTerm == "Infinity" ? 0 : transTerm.toFixed(5);
-
-    setAllData({
-      ...allData,
-      resTer: valueResistTem,
-      transTer: valueTransTer,
-    });
-
-    setStateResistenData(false);
-  }, [stateResistenData]);
-
-  useEffect(() => {
     setAllData({
       tempAmb: "",
       tempInt: "",
